@@ -1,12 +1,12 @@
-const mysql = require('mysql');
-const inquirer = require ('inquirer');
+const mysql = require('mysql2');
+const inquirer = require('inquirer');
 
 const EmployeeDb = mysql.createConnection({
     host: 'localhost',
-    port: 3001,
+    port: 3306,
     user: 'root',
     password: 'root',
-    database: 'employees'
+    database: 'employees_db'
 });
 
 EmployeeDb.connect((err) => {
@@ -58,7 +58,7 @@ function departments() {
 }
 
 function roles() {
-    EmployeeDb.query('SELECT roles.id, roles.title, departments.name AS department, roles.salary FROM roles lEFT JOIN departments ON roles.department_id = departments.id', (err, res) => {
+    EmployeeDb.query('SELECT roles.id, roles.title, departments.title AS department, roles.salary FROM roles lEFT JOIN departments ON roles.department_id = departments.id', (err, res) => {
         if (err) throw err;
         console.table(res);
         app();
@@ -66,7 +66,7 @@ function roles() {
 }
 
 function employees() {
-    EmployeeDb.query('SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.name AS department, roles.salary, CONCAT(managers.first_name, " ", managers.last_name) AS manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id LEFT JOIN employees managers ON employees.manager_id = managers.id', (err, res) => {
+    EmployeeDb.query('SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.title AS department, roles.salary, CONCAT(managers.first_name, " ", managers.last_name) AS manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id LEFT JOIN employees managers ON employees.manager_id = managers.id', (err, res) => {
         if (err) throw err;
         console.table(res);
         app();

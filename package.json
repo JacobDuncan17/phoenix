@@ -1,7 +1,6 @@
 {
   "name": "phoenix",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,8 +9,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^9.1.5",
+    "inquirer": "^8.2.0",
     "mysql": "^2.18.1",
+    "mysql2": "^3.2.1",
     "node": "^19.8.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacobDuncan17/phoenix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JacobDuncan17/phoenix/issues"
+  },
+  "homepage": "https://github.com/JacobDuncan17/phoenix#readme",
+  "description": ""
 }
