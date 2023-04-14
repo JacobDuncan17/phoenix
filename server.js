@@ -45,6 +45,22 @@ function app() {
                 case 'View all employees':
                     employees();
                     break;
+
+                case 'Add a department':
+                    addDepartment();
+                    break;
+
+                case 'Add a role':
+                    addRole();
+                    break;
+
+                case 'Add an Employee':
+                    addEmployee();
+                    break;
+
+                case 'Edit an Employee':
+                    editEmployee();
+                    break;
             }
         })
 }
@@ -73,3 +89,36 @@ function employees() {
     })
 }
 
+function addDepartment() {
+    inquirer
+        .prompt({
+            name: 'name',
+            input: 'input',
+            message: 'Enter the name of the department:'
+        })
+        .then((answer) => {
+            EmployeeDb.query(
+                'INSERT INTO Departments SET ?',
+                {
+                    title: answer.name
+                },
+                (err, res) => {
+                if (err) throw err;
+                console.log(`${res.affectedRows} department has been added.`);
+                app();
+                }
+            );   
+        });
+}
+
+function addRole() {
+
+}
+
+function addEmployee() {
+
+}
+
+function editEmployee() {
+
+}
