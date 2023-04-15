@@ -18,7 +18,7 @@ https://github.com/JacobDuncan17/phoenix
 * run "node server.js"
 
 ## License
-MIT License https://opensource.org/license/mit-0/
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Demonstration
 https://vimeo.com/817837625
