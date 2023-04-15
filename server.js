@@ -58,8 +58,13 @@ function app() {
                     addEmployee();
                     break;
 
-                case 'Upadate an employee role':
+                case 'Update an employee role':
                     editEmployee();
+                    break;
+                
+                case 'End':
+                    console.log('Peace!!');
+                    EmployeeDb.end();
                     break;
             }
         })
@@ -214,31 +219,48 @@ function addEmployee() {
 }
 
 function editEmployee() {
-    EmployeeDb.query('', (err, res) => {
-        if (err) throw err;
-        inquirer
-        .prompt([
-            {
-                name: '',
-                input: '',
-                message: ''
-            },
-            {
-                name: '',
-                type: '',
-                message: '',
-                choices: '',
-            },
-        ])
-        .then((answer) => {
-            EmployeeDb.query(
-                '',
-                [],
-                (err, res) => {
+    EmployeeDb.query('SELECT * FROM employees', (err, employees) => {
+      if (err) throw err;
+  
+      inquirer
+        .prompt({
+          name: 'employee',
+          type: 'list',
+          message: 'Which employee would you like to edit:',
+          choices: employees.map((employee) => ({
+            name: `${employee.first_name} ${employee.last_name}`,
+            value: employee.id,
+          })),
+        })
+        .then((employeeAnswer) => {
+          EmployeeDb.query('SELECT * FROM roles', (err, roles) => {
+            if (err) throw err;
+  
+            inquirer
+              .prompt({
+                name: 'role',
+                type: 'list',
+                message: `What is the new role for ${employeeAnswer.employee}:`,
+                choices: roles.map((role) => ({
+                  name: role.title,
+                  value: role.id,
+                })),
+              })
+              .then((roleAnswer) => {
+                EmployeeDb.query(
+                  'UPDATE employees SET role_id = ? WHERE id = ?',
+                  [roleAnswer.role, employeeAnswer.employee],
+                  (err, res) => {
                     if (err) throw err;
-                }
-            );
+                    console.log(
+                      `${res.affectedRows} employees role has been changed.`
+                    );
+                    app();
+                  }
+                );
+              });
+          });
         });
     });
-
-}
+  }
+  
