@@ -112,6 +112,51 @@ function addDepartment() {
 }
 
 function addRole() {
+    EmployeeDb.query('SELECT title FROM Departments', (err, res) => {
+        if (err) throw err;
+        inquirer
+        .prompt([
+            {
+                name: 'title',
+                input: 'input',
+                message: 'Enter the name of the role to add:'
+            },
+            {
+                name: 'salary',
+                input: 'input',
+                message: 'Enter salary for the role:',
+            },
+            {
+                name: 'department',
+                type: 'list',
+                message: 'Select the department for the role:',
+                choices: res.map(department => department.title)
+            },
+        ])
+        .then((answer) => {
+            EmployeeDb.query(
+                'SELECT id FROM Departments WHERE title = ?',
+                [answer.department],
+                (err, res) => {
+                    if (err) throw err;
+
+                    EmployeeDb.query(
+                        'INSERT INTO Roles SET ?',
+                        {
+                            title: answer.title,
+                            salary: answer.salary,
+                            department_id: res[0].id
+                        },
+                        (err, res) => {
+                            if (err) throw err;
+                            console.log(`${res.affectedRows} role has been added.`)
+                            app();
+                        }
+                    ); 
+                }
+            );
+        });
+    });
 
 }
 
