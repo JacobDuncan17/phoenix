@@ -54,11 +54,11 @@ function app() {
                     addRole();
                     break;
 
-                case 'Add an Employee':
+                case 'Add an employee':
                     addEmployee();
                     break;
 
-                case 'Edit an Employee':
+                case 'Upadate an employee role':
                     editEmployee();
                     break;
             }
@@ -161,9 +161,84 @@ function addRole() {
 }
 
 function addEmployee() {
+    EmployeeDb.query('SELECT * FROM roles', (err, roles) => {
+        if(err) throw err;
+        EmployeeDb.query('SELECT * FROM employees', (err, employees) => {
+            if (err) throw err;
+            inquirer
+                .prompt([
+                    {
+                        name: 'firstName',
+                        input: 'input',
+                        message: 'Enter first name of the employee:'
+                    },
+                    {
+                        name: 'lastName',
+                        input: 'input',
+                        message: 'Enter last name of the employee:',
+                    },
+                    {
+                        name: 'role',
+                        type: 'list',
+                        message: 'Choose the employees roles:',
+                        choices: roles.map(role => role.title),
 
+                    },
+                    {
+                        name: 'manager',
+                        type: 'list',
+                        message: 'Choose the employees manager:',
+                        choices: employees.map(employee => `${employee.first_name} ${employee.last_name}`),
+                    },
+                ])
+                .then((answer) => {
+                    const roleId = roles.find(role => role.title === answer.role).id;
+                    const managerId = employees.find(employee => `${employee.first_name} ${employee.last_name}` === answer.manager).id;
+                    EmployeeDb.query(
+                        `INSERT INTO employees SET ?`,
+                        {
+                            first_name: answer.firstName,
+                            last_name: answer.lastName,
+                            role_id: roleId,
+                            manager_id: managerId,
+                        },
+                        (err, res) => {
+                            if (err) throw err;
+                            console.log(`${res.affectedRows} employee has been added.`)
+                            app();
+                        }
+                    );
+                });
+        });
+    });
 }
 
 function editEmployee() {
+    EmployeeDb.query('', (err, res) => {
+        if (err) throw err;
+        inquirer
+        .prompt([
+            {
+                name: '',
+                input: '',
+                message: ''
+            },
+            {
+                name: '',
+                type: '',
+                message: '',
+                choices: '',
+            },
+        ])
+        .then((answer) => {
+            EmployeeDb.query(
+                '',
+                [],
+                (err, res) => {
+                    if (err) throw err;
+                }
+            );
+        });
+    });
 
 }
